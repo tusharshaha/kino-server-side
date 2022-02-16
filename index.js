@@ -17,8 +17,11 @@ async function run (){
         const database = client.db('Kino')
         const productCollections = database.collection('products')
 
-        
-
+        // get products
+        app.get('/products', async (req,res)=>{
+            const products = await productCollections.find({}).toArray();
+            res.send(products);
+        })
     }finally{
         // await client.close()
     }
