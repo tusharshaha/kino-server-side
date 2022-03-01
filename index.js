@@ -29,6 +29,11 @@ async function run() {
             const result = await reviewCollections.insertOne(review);
             res.json(result);
         })
+        // get product reviews
+        app.get('/review', async (req, res) => {
+            const reviews = await reviewCollections.find({}).toArray();
+            res.send(reviews);
+        })
     } finally {
         // await client.close()
     }
