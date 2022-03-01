@@ -11,18 +11,25 @@ app.use(cors());
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.2xl13.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-async function run (){
-    try{
+async function run() {
+    try {
         await client.connect();
-        const database = client.db('Kino')
-        const productCollections = database.collection('products')
+        const database = client.db('Kino');
+        const productCollections = database.collection('products');
+        const reviewCollections = database.collection('reviews');
 
         // get products
-        app.get('/products', async (req,res)=>{
+        app.get('/products', async (req, res) => {
             const products = await productCollections.find({}).toArray();
             res.send(products);
         })
-    }finally{
+        // post product review
+        app.post('/review', async (req, res) => {
+            const review = req.body;
+            const result = await reviewCollections.insertOne(review);
+            res.json(result);
+        })
+    } finally {
         // await client.close()
     }
 }
