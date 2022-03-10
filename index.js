@@ -37,8 +37,7 @@ async function run() {
         // post user order
         app.post("/order", async (req, res) => {
             const order = req.body;
-            const options = { ordered: true };
-            const result = await orderCollections.insertMany(order, options);
+            const result = await orderCollections.insertOne(order);
             res.json(result)
         })
         app.get("/orders/:email", async (req, res) => {
