@@ -35,11 +35,16 @@ async function run() {
             res.json(result);
         })
         // post user order
-        app.post("/order", async (req, res)=>{
+        app.post("/order", async (req, res) => {
             const order = req.body;
             const options = { ordered: true };
             const result = await orderCollections.insertMany(order, options);
             res.json(result)
+        })
+        app.get("/orders/:email", async (req, res) => {
+            const query = { user : req.params.email };
+            const result = await orderCollections.find(query).toArray();
+            res.send(result)
         })
     } finally {
         // await client.close()
