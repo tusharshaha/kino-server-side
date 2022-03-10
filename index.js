@@ -17,11 +17,16 @@ async function run() {
         const database = client.db('Kino');
         const productCollections = database.collection('products');
         const reviewCollections = database.collection('reviews');
-
+        const orderCollections = database.collection("orders");
         // get products
         app.get('/products', async (req, res) => {
             const products = await productCollections.find({}).toArray();
             res.send(products);
+        })
+        // get product reviews
+        app.get('/review', async (req, res) => {
+            const reviews = await reviewCollections.find({}).toArray();
+            res.send(reviews);
         })
         // post product review
         app.post('/review', async (req, res) => {
@@ -29,10 +34,12 @@ async function run() {
             const result = await reviewCollections.insertOne(review);
             res.json(result);
         })
-        // get product reviews
-        app.get('/review', async (req, res) => {
-            const reviews = await reviewCollections.find({}).toArray();
-            res.send(reviews);
+        // post user order
+        app.post("/order", async (req, res)=>{
+            const order = req.body;
+            const options = { ordered: true };
+            const result = await orderCollections.insertMany(order, options);
+            res.json(result)
         })
     } finally {
         // await client.close()
