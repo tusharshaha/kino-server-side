@@ -20,10 +20,17 @@ app.get('/', (req, res) => {
 })
 
 // send response for undefined route
-app.all("*", (req, res)=>{
+app.all("*", (req, res) => {
     res.send("No Route Found!!!");
 })
 // connect with port
 app.listen(port, () => {
     console.log(`listening from http://localhost:${port} `)
 })
+// global error handler 
+process.on("unhandledRejection", (error) => {
+    console.log(error.name, error.message);
+    app.close(() => {
+        process.exit(1);
+    });
+});
